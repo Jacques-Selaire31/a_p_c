@@ -1,0 +1,42 @@
+### Symfony ###
+/.env.local
+/.env.local.php
+/.env.*.local
+
+/var/
+/vendor/
+
+### Doctrine / DB ###
+/migrations/*.php~
+/migrations/*.log
+
+### JWT keys ###
+/config/jwt/*.pem
+
+### Cache & logs ###
+/var/cache/
+/var/log/
+
+### Node / Front ###
+/node_modules/
+/npm-debug.log*
+/yarn-error.log*
+
+### IDE ###
+/.idea/
+/.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### PHPUnit ###
+/.phpunit.result.cache
+
+### Webpack / Vite ###
+/public/build/
+/public/dist/
+
+### Temporary ###
+*.tmp
+*.log
