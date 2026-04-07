@@ -33,3 +33,5 @@ Thumbs.db
 ### Build ###
 /public/build/
 /public/dist/
+
+Dockerfile
