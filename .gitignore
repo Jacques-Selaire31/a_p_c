@@ -1,0 +1,12 @@
+# Dossiers à exclure
+captures/
+diagrammes/
+docker screenshot/
+
+# Fichiers système Windows
+Thumbs.db
+desktop.ini
+
+# Archives
+*.rar
+*.zip

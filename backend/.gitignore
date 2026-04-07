@@ -1,14 +1,12 @@
 ### Symfony ###
+/.env
+/.env.dev
+/.env.test
 /.env.local
-/.env.local.php
 /.env.*.local
 
 /var/
 /vendor/
-
-### Doctrine / DB ###
-/migrations/*.php~
-/migrations/*.log
 
 ### JWT keys ###
 /config/jwt/*.pem
@@ -17,7 +15,7 @@
 /var/cache/
 /var/log/
 
-### Node / Front ###
+### Node / Assets ###
 /node_modules/
 /npm-debug.log*
 /yarn-error.log*
@@ -33,10 +31,6 @@ Thumbs.db
 ### PHPUnit ###
 /.phpunit.result.cache
 
-### Webpack / Vite ###
+### Build ###
 /public/build/
 /public/dist/
-
-### Temporary ###
-*.tmp
-*.log

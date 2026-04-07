@@ -1,0 +1,37 @@
+{
+  "title": "Pourquoi la Formule 1 fascine toujours autant",
+  "content": {
+    "time": 1704825600000,
+    "blocks": [
+      {
+        "id": "h1a2b3",
+        "type": "header",
+        "data": {
+          "text": "Un sport entre technologie et passion",
+          "level": 2
+        }
+      },
+      {
+        "id": "p1a2b3",
+        "type": "paragraph",
+        "data": {
+          "text": "La Formule 1 n’est pas qu’un simple sport automobile."
+        }
+      },
+      {
+        "id": "q7f8g9",
+        "type": "quote",
+        "data": {
+          "text": "La Formule 1 est trop compliquée pour être comprise, et trop belle pour être ignorée.",
+          "caption": "Un passionné anonyme",
+          "alignment": "left"
+        }
+      }
+    ],
+    "version": "2.28.2"
+  },
+  "categoryIds": [1, 3]
+}
+
+
+

@@ -22,11 +22,11 @@ class Category
      * @var Collection<int, Article>
      */
     #[ORM\ManyToMany(targetEntity: Article::class, inversedBy: 'categories')]
-    private Collection $article;
+    private Collection $articles;
 
     public function __construct()
     {
-        $this->article = new ArrayCollection();
+        $this->articles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,13 +51,13 @@ class Category
      */
     public function getArticle(): Collection
     {
-        return $this->article;
+        return $this->articles;
     }
 
     public function addArticle(Article $article): static
     {
-        if (!$this->article->contains($article)) {
-            $this->article->add($article);
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
         }
 
         return $this;
@@ -65,7 +65,7 @@ class Category
 
     public function removeArticle(Article $article): static
     {
-        $this->article->removeElement($article);
+        $this->articles->removeElement($article);
 
         return $this;
     }

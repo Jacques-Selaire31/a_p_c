@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -18,41 +19,67 @@ class Article
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 25, max: 255)]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: '3 caractères minimum requis.',
+        maxMessage: 'Le titre est trop long.'
+    )]
     private ?string $title = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    private ?string $slug = null;
 
     #[ORM\Column(type: 'json')]
     #[Assert\NotBlank]
     private array $content = [];
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $coverImage = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    private ?string $textPreview = null;
 
     #[ORM\Column]
-    private ?bool $is_published = null;
+    private ?\DateTimeImmutable $createdAt = null;
+
+    // #[ORM\Column]
+    // private ?\DateTimeImmutable $publishedAt = null;
+    #[ORM\Column]
+
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
-    private ?bool $is_active = null;
+    private ?bool $isPublished = null;
 
-    #[ORM\ManyToOne(inversedBy: 'article')]
+    #[ORM\Column]
+    private ?bool $isActive = null;
+
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(inversedBy: 'articles')]
     private ?User $author = null;
 
     /**
      * @var Collection<int, Category>
      */
-    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'article')]
-    #[Assert\Count(min: 1, max: 3, minMessage: 'Selectionnez au moins une catégorie', maxMessage: 'Vous ne pouvez sélectionner que 3 catégories maximum.')]
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'articles')]
+    #[Assert\Count(min: 1, max: 3)]
     private Collection $categories;
 
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'article')]
+    private Collection $comments;
 
     public function __construct()
-    {       $this->createdAt = new \DateTimeImmutable();
-    $this->isPublished = false;
-    $this->articleIsActive = true;
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->isPublished = false;
+        $this->isActive = true;
         $this->categories = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -72,6 +99,16 @@ class Article
         return $this;
     }
 
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+        return $this;
+    }
     public function getContent(): array
     {
         return $this->content;
@@ -83,51 +120,83 @@ class Article
 
         return $this;
     }
+    public function getCoverImage(): ?string
+    {
+        return $this->coverImage;
+    }
+    public function setCoverImage(string $coverImage): static
+    {
+        $this->coverImage=$coverImage;
+        return $this;
+    }
+
+    public function getTextPreview(): string
+    {
+        return $this->textPreview;
+    }
+
+    public function setTextPreview(?string $textPreview): static
+    {
+        $this->textPreview = $textPreview;
+        return $this;
+    }
 
     public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
+    //     public function getPublishedAt(): ?\DateTimeImmutable
+    // {
+    //     return $this->createdAt;
+    // }
+
+    // public function setPublishedAt(\DateTimeImmutable $createdAt): static
+    // {
+    //     $this->createdAt = $createdAt;
+
+    //     return $this;
+    // }
+
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
     public function isPublished(): ?bool
     {
-        return $this->is_published;
+        return $this->isPublished;
     }
 
-    public function setIsPublished(bool $is_published): static
+    public function setIsPublished(bool $isPublished): static
     {
-        $this->is_published = $is_published;
+        $this->isPublished = $isPublished;
 
         return $this;
     }
 
     public function isActive(): ?bool
     {
-        return $this->is_active;
+        return $this->isActive;
     }
 
-    public function setIsActive(bool $is_active): static
+    public function setIsActive(bool $isActive): static
     {
-        $this->is_active = $is_active;
+        $this->isActive = $isActive;
 
         return $this;
     }
@@ -166,6 +235,36 @@ class Article
     {
         if ($this->categories->removeElement($category)) {
             $category->removeArticle($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getArticle() === $this) {
+                $comment->setArticle(null);
+            }
         }
 
         return $this;

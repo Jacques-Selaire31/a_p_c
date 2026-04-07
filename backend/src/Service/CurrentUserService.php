@@ -17,4 +17,10 @@ class CurrentUserService
 
         return $user;
     }
+        public function getPseudo(): string
+    {
+        return $this->getUser()->getPseudo();
+    }
 }
+
+

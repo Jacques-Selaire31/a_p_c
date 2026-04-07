@@ -25,7 +25,7 @@ final class UserController extends AbstractController
 
             return new JsonResponse(
                 ['message' => 'Utilisateur créé'],
-                201
+                201 // Created
             );
         } catch (\InvalidArgumentException $error) {
             return new JsonResponse(
