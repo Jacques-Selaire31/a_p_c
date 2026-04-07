@@ -32,5 +32,4 @@ COPY . .
 ENV APP_ENV=prod
 RUN APP_ENV=prod APP_DEBUG=0 composer install --optimize-autoloader --no-scripts
 
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 775 var/
+RUN mkdir -p var && chown -R www-data:www-data /var/www/html && chmod -R 775 var/
