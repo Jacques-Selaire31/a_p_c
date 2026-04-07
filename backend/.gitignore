@@ -1,5 +1,4 @@
 ### Symfony ###
-/.env
 /.env.dev
 /.env.test
 /.env.local
