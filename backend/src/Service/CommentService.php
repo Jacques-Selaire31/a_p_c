@@ -30,7 +30,7 @@ class CommentService
         }
 
         $comment = new Comment();
-        $comment->setContent($data['content']);
+        $comment->setContent(trim(strip_tags($data['content'])));
         $comment->setAuthor($this->currentUserService->getUser());
         $comment->setArticle($article);
 

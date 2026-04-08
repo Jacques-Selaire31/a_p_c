@@ -5,12 +5,12 @@ services:
     ports:
       - "8000:80"
     environment:
+      APP_ENV: dev
+      APP_SECRET: ${APP_SECRET}
       DATABASE_URL: mysql://root:@database:3306/au_point_de_corde?serverVersion=8.0&charset=utf8mb4
-      APP_ENV: ${APP_ENV:-dev}
-      APP_SECRET: ${APP_SECRET:-changeme}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-%kernel.project_dir%/config/jwt/private.pem}
-      JWT_PUBLIC_KEY: ${JWT_PUBLIC_KEY:-%kernel.project_dir%/config/jwt/public.pem}
-      JWT_PASSPHRASE: ${JWT_PASSPHRASE:-sarah}
+      JWT_SECRET_KEY: /var/www/html/config/jwt/private.pem
+      JWT_PUBLIC_KEY: /var/www/html/config/jwt/public.pem
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
     volumes:
       - .:/var/www/html
     depends_on:
@@ -23,17 +23,15 @@ services:
     environment:
       MYSQL_DATABASE: au_point_de_corde
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_USER: app
-      MYSQL_PASSWORD: app
     ports:
       - "3306:3306"
+    volumes:
+      - database_data:/var/lib/mysql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
       retries: 5
       start_period: 30s
-    volumes:
-      - database_data:/var/lib/mysql
 
 volumes:
   database_data:
